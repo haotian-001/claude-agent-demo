@@ -23,20 +23,13 @@ def validate_environment():
 
     # Check for required environment variables
     base_url = os.getenv('ANTHROPIC_BASE_URL')
-    auth_token = os.getenv('ANTHROPIC_AUTH_TOKEN')
     api_key = os.getenv('ANTHROPIC_API_KEY')
 
     if not base_url:
         errors.append("❌ ANTHROPIC_BASE_URL is not set")
 
-    if not auth_token:
-        errors.append("❌ ANTHROPIC_AUTH_TOKEN is not set")
-
-    # Check that API_KEY is explicitly empty (critical for redirection)
-    if api_key is None:
-        errors.append("❌ ANTHROPIC_API_KEY is not defined in .env")
-    elif api_key != "":
-        errors.append('❌ ANTHROPIC_API_KEY must be explicitly set to empty string ""')
+    if not api_key:
+        errors.append("❌ ANTHROPIC_API_KEY is not set")
 
     if errors:
         print("Environment validation failed:\n")
@@ -63,7 +56,8 @@ async def main():
     print("\nConfiguration:")
     print(f"  Base URL: {os.getenv('ANTHROPIC_BASE_URL', 'Not set')}")
     print(f"  Model: {os.getenv('MODEL_NAME', 'claude-sonnet-4-5')}")
-    print(f"  API Key: {'Empty (✓)' if os.getenv('ANTHROPIC_API_KEY') == '' else 'Not empty (✗)'}")
+    api_key = os.getenv('ANTHROPIC_API_KEY', '')
+    print(f"  API Key: {'Set (✓)' if api_key else 'Not set (✗)'}")
 
     # Validate environment variables
     print("\nValidating environment variables...")
@@ -104,8 +98,7 @@ async def main():
         print("=" * 60)
         print("\nTroubleshooting:")
         print("  - Verify your custom endpoint is accessible")
-        print("  - Check that ANTHROPIC_AUTH_TOKEN is valid")
-        print("  - Ensure ANTHROPIC_API_KEY is set to empty string")
+        print("  - Check that ANTHROPIC_API_KEY is valid")
         print("  - Confirm the model name is correct")
         sys.exit(1)
 

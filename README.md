@@ -48,12 +48,9 @@ This project shows how to configure the Claude Agent SDK to use a custom endpoin
    Edit the `.env` file and set your credentials:
    ```env
    ANTHROPIC_BASE_URL=https://your-custom-endpoint.com
-   ANTHROPIC_AUTH_TOKEN=your-auth-token-here
-   ANTHROPIC_API_KEY=""
+   ANTHROPIC_API_KEY=your-api-key-here
    MODEL_NAME=claude-sonnet-4-5
    ```
-
-   **⚠️ CRITICAL**: The `ANTHROPIC_API_KEY` must be explicitly set to an empty string `""` for the SDK to properly redirect to your custom endpoint.
 
 ## Usage
 
@@ -73,7 +70,7 @@ Claude Agent SDK Demo - Custom Endpoint Configuration
 Configuration:
   Base URL: https://your-custom-endpoint.com
   Model: claude-sonnet-4-5
-  API Key: Empty (✓)
+  API Key: Set (✓)
 
 Validating environment variables...
 ✓ Environment validation passed
@@ -94,15 +91,14 @@ Demo completed successfully!
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `ANTHROPIC_BASE_URL` | Yes | Your custom endpoint URL |
-| `ANTHROPIC_AUTH_TOKEN` | Yes | Authentication token for your custom endpoint |
-| `ANTHROPIC_API_KEY` | Yes | Must be set to empty string `""` for endpoint redirection |
+| `ANTHROPIC_API_KEY` | Yes | Your API key for authentication |
 | `MODEL_NAME` | No | Claude model to use (default: `claude-sonnet-4-5`) |
 
 ### How Environment Variable Redirection Works
 
 The Claude Agent SDK automatically respects these environment variables:
-- When `ANTHROPIC_BASE_URL` and `ANTHROPIC_AUTH_TOKEN` are set, the SDK redirects API calls to your custom endpoint
-- Setting `ANTHROPIC_API_KEY=""` (explicitly empty) is required to enable this redirection
+- When `ANTHROPIC_BASE_URL` is set, the SDK redirects API calls to your custom endpoint
+- `ANTHROPIC_API_KEY` contains your authentication credentials
 - No code changes are needed - the SDK handles everything automatically
 
 ## GitHub Actions CI/CD
@@ -116,8 +112,7 @@ This repository includes a GitHub Actions workflow that tests the demo on GitHub
    Go to your repository Settings → Secrets and variables → Actions, and add:
 
    - `ANTHROPIC_BASE_URL` - Your custom endpoint URL
-   - `ANTHROPIC_AUTH_TOKEN` - Your authentication token
-   - `ANTHROPIC_API_KEY` - Set to empty string `""`
+   - `ANTHROPIC_API_KEY` - Your API key for authentication
    - `MODEL_NAME` - (Optional) Model name, defaults to `claude-sonnet-4-5`
 
 2. **Trigger the Workflow**
@@ -175,23 +170,17 @@ Make sure you've:
 1. Created a `.env` file (copy from `.env.example`)
 2. Set the `ANTHROPIC_BASE_URL` variable in `.env`
 
-### Error: "ANTHROPIC_API_KEY must be explicitly set to empty string"
+### Error: "ANTHROPIC_API_KEY is not set"
 
-Your `.env` file must contain:
-```env
-ANTHROPIC_API_KEY=""
-```
-
-Not:
-- `ANTHROPIC_API_KEY=` (missing quotes)
-- Commenting out the line
-- Omitting the line entirely
+Make sure you've:
+1. Created a `.env` file (copy from `.env.example`)
+2. Set the `ANTHROPIC_API_KEY` variable with your API key
 
 ### Connection Errors
 
 If you get connection errors:
 1. Verify your custom endpoint is accessible
-2. Check that `ANTHROPIC_AUTH_TOKEN` is valid
+2. Check that `ANTHROPIC_API_KEY` is valid
 3. Confirm the endpoint URL is correct (including `https://`)
 4. Test the endpoint with curl or another tool first
 
